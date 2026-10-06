@@ -1,0 +1,13 @@
+*.sln
+*.exe
+*.dll
+*.pdb
+
+**/bin/
+**/obj/
+*.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*editorconfig
