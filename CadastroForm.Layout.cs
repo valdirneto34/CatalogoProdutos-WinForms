@@ -174,7 +174,7 @@ public partial class CadastroForm {
             Dock = DockStyle.Fill,
             Padding = new Padding(12),
             ColumnCount = 4,
-            RowCount = 10
+            RowCount = 11
         };
 
         layout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
@@ -192,36 +192,95 @@ public partial class CadastroForm {
         layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
 
         txtPesquisa.Margin = new Padding(3, 3, 24, 3);
-        txtCategoria.Margin = new Padding(3, 3, 24, 3);
+        cmbCategoria.Margin = new Padding(3, 3, 24, 3);
+        txtCodigo.Margin = new Padding(3, 3, 24, 3);
         txtNome.Margin = new Padding(3, 3, 24, 3);
-        txtMatricula.Margin = new Padding(3, 3, 24, 3);
-        cmbCurso.Margin = new Padding(3, 3, 24, 3);
+        numEstoque.Margin = new Padding(3, 3, 24, 3);
+        cmbCategoriaForm.Margin = new Padding(3, 3, 24, 3);
+        txtPreco.Margin = new Padding(3, 3, 24, 3);
+        txtDataCadastro.Margin = new Padding(3, 3, 24, 3);
 
-        layout.Controls.Add(lblNome, 0, 0);
-        layout.Controls.Add(txtNome, 1, 0);
+        layout.Controls.Add(lblPesquisa, 0, 0);
+        layout.Controls.Add(lblCategoria, 1, 0);
 
-        layout.Controls.Add(lblMatricula, 0, 1);
-        layout.Controls.Add(txtMatricula, 1, 1);
+        layout.Controls.Add(txtPesquisa, 0, 1);
+        layout.Controls.Add(cmbCategoria, 1, 1);
 
-        layout.Controls.Add(lblCurso, 0, 2);
-        layout.Controls.Add(cmbCurso, 1, 2);
+        layout.Controls.Add(chkAtivo, 2, 1);
+
+        var botoesPesquisa = new FlowLayoutPanel {
+            Dock = DockStyle.Fill,
+            AutoSize = true,
+            TabIndex = 2
+        };
+
+        botoesPesquisa.Controls.AddRange(new Control[]{
+        btnPesquisar, btnLimparFiltros
+        });
+
+        layout.Controls.Add(botoesPesquisa, 0, 2);
+        layout.SetColumnSpan(botoesPesquisa, 3);
+
+        layout.Controls.Add(lblResultado, 3, 2);
+
+        layout.Controls.Add(grade, 0, 3);
+        layout.SetColumnSpan(grade, 4);
+
+        layout.Controls.Add(lblDadosProduto, 0, 4);
+
+        layout.Controls.Add(lblCodigo, 0, 5);
+        layout.Controls.Add(txtCodigo, 1, 5);
+        layout.Controls.Add(lblCategoria, 2, 5);
+        layout.Controls.Add(cmbCategoria, 3, 5);
+
+        layout.Controls.Add(lblNome, 0, 6);
+        layout.Controls.Add(txtNome, 1, 6);
+        layout.Controls.Add(lblPreco, 2, 6);
+        layout.Controls.Add(txtPreco, 3, 6);
+
+        layout.Controls.Add(lblEstoque, 0, 7);
+        layout.Controls.Add(numEstoque, 1, 7);
+        layout.Controls.Add(lblCadastro, 2, 7);
+        layout.Controls.Add(txtDataCadastro, 3, 7);
+        
+        layout.Controls.Add(lblSituacao, 0, 8);
+        layout.Controls.Add(painelSituacao, 1, 8);
+        layout.Controls.Add(chkPromocao, 3, 8);
 
         var botoes = new FlowLayoutPanel {
             Dock = DockStyle.Fill,
             AutoSize = true,
             TabIndex = 2
         };
+
         botoes.Controls.AddRange(new Control[]{
-        btnSalvar, btnNovo, btnExcluir
+        btnNovo, btnSalvar, btnExcluir
         });
-        layout.Controls.Add(botoes, 0, 3);
+
+
+        layout.Controls.Add(botoes, 0, 9);
         layout.SetColumnSpan(botoes, 3);
 
-        layout.Controls.Add(grade, 0, 4);
-        layout.SetColumnSpan(grade, 2);
-        layout.Controls.Add(lblStatus, 0, 5);
+
+        var botoesCancelar = new FlowLayoutPanel {
+            Dock = DockStyle.Fill,
+            AutoSize = true,
+            TabIndex = 2
+        };
+
+        botoesCancelar.Controls.AddRange(new Control[]{
+        btnCancelar, btnFechar
+        });
+
+        layout.Controls.Add(botoesCancelar, 3, 9);
+        layout.SetColumnSpan(botoesCancelar, 3);
+
+
+
+        layout.Controls.Add(lblStatus, 0, 10);
         layout.SetColumnSpan(lblStatus, 2);
         Controls.Add(layout);
     }
