@@ -2,128 +2,199 @@ using System.ComponentModel;
 namespace CatalogoProdutos;
 
 public partial class CadastroForm : Form {
-    private readonly BindingList<Aluno> alunos = new();
-    private Aluno? alunoEmEdicao;
+    private readonly BindingList<Produto> produtos = new();
+    private Produto? produtoEmEdicao;
 
     public CadastroForm() {
         MontarTela();
-        grade.DataSource = alunos;
+        grade.DataSource = produtos;
         erros.ContainerControl = this;
         ConectarEventos();
         PrepararNovo();
     }
 
     private void ConectarEventos() {
-        btnSalvar.Click += SalvarAluno;
-        btnNovo.Click += NovoAluno;
-        btnExcluir.Click += ExcluirAluno;
-        grade.CellClick += SelecionarAluno;
+        btnPesquisar.Click += PesquisarProduto;
+        btnLimparFiltros.Click += LimparFiltros;
+
+        btnNovo.Click += NovoProduto;
+        btnSalvar.Click += SalvarProduto;
+        btnExcluir.Click += ExcluirProduto;
+        grade.CellClick += SelecionarProduto;
     }
 
-    private void NovoAluno(object? sender, EventArgs args) {
+    private void PesquisarProduto(object? sender, EventArgs args) {
+        string nomeOuCodigo = txtPesquisa.Text.Trim().ToLower();
+        string categoria = cmbCategoria.SelectedItem?.ToString() ?? "";
+        bool somenteEstoque = chkAtivo.Checked;
+
+        BindingList<Produto> produtosEncontrados = new();
+        
+        foreach (Produto p in produtos) {
+            bool atendePesquisa = string.IsNullOrEmpty(nomeOuCodigo) ||
+                              p.Nome.ToLower().Contains(nomeOuCodigo) ||
+                              p.Codigo.ToLower().Contains(nomeOuCodigo);
+            bool atendeCategoria = categoria == "Todas" || p.Categoria == categoria;
+            bool atendeEstoque = !somenteEstoque || p.Estoque > 0;
+            if (atendePesquisa && atendeCategoria && atendeEstoque)
+                produtosEncontrados.Add(p);
+        }
+        lblResultado.Text = $"{produtosEncontrados.Count} produtos encontrados";
+        grade.DataSource = produtosEncontrados;
+    }
+
+    private void LimparFiltros(object? sender, EventArgs args) {
+        txtPesquisa.Clear();
+        cmbCategoria.SelectedIndex = 0;
+        chkAtivo.Checked = false;
+        grade.DataSource = produtos;
+        txtPesquisa.Focus();
+    }
+
+    private void NovoProduto(object? sender, EventArgs args) {
         PrepararNovo();
     }
 
     private void PrepararNovo() {
-        alunoEmEdicao = null;
+        produtoEmEdicao = null;
         txtNome.Clear();
-        txtMatricula.Clear();
-        cmbCurso.SelectedIndex = -1;
+        txtCodigo.Clear();
+        txtPreco.Clear();
+        txtPesquisa.Clear();
+        numEstoque.Value = 0;
+        dtpDataCadastro.Value = DateTime.Now;
+        chkPromocao.Checked = false;
+        rdbAtivo.Checked = true;
+
+        cmbCategoriaForm.SelectedIndex = 0;
+
         grade.ClearSelection();
         erros.Clear();
+
         btnSalvar.Text = "Salvar";
         btnExcluir.Enabled = false;
-        lblStatus.Text = "Novo aluno. Preencha e clique em Salvar.";
         txtNome.Focus();
     }
     private bool ValidarCampos() {
         erros.Clear();
         if (txtNome.Text.Trim().Length < 3) {
-            erros.SetError(txtNome, "Informe pelo menos 3 caracteres.");
-            lblStatus.Text = "Nome do aluno tem qye ter no mínimo 3 letras.";
+            MessageBox.Show("O nome do produto deve ter no mínimo 3 caracteres.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             txtNome.Focus();
             return false;
         }
-        if (txtMatricula.Text.Trim().Length == 0) {
-            erros.SetError(txtMatricula, "Matricula Vazia");
-            lblStatus.Text = "Revise a matricula.";
-            txtNome.Focus();
+        
+        if (txtCodigo.Text.Trim().Length == 0) {
+            MessageBox.Show("O código do produto não pode ser vazio.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            txtCodigo.Focus();
             return false;
-        } else {
-            foreach (Aluno a in alunos) {
-                if (a.Matricula == txtMatricula.Text.Trim() && alunoEmEdicao == null ) {
-                    erros.SetError(txtMatricula, "Matricula já Existente");
-                    lblStatus.Text = "Matrícula já existente.";
-                    txtMatricula.Focus();
+        }
+        else {
+            foreach (Produto p in produtos) {
+                if (p.Codigo == txtCodigo.Text.Trim() && produtoEmEdicao == null) {
+                    MessageBox.Show("Já existe um produto com este código.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtCodigo.Focus();
                     return false;
                 }
             }
         }
-        if (cmbCurso.SelectedIndex < 0) {
-            erros.SetError(cmbCurso, "Selecione um curso.");
-            lblStatus.Text = "Revise o curso do aluno.";
-            cmbCurso.Focus();
+        if (cmbCategoriaForm.SelectedIndex < 0) {
+            MessageBox.Show("Selecione uma categoria válida.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            cmbCategoriaForm.Focus();
             return false;
         }
+
+        if (!double.TryParse(txtPreco.Text.Trim(), out double precoValor) || precoValor < 0) {
+        MessageBox.Show("Preço inválido.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        txtPreco.Focus();
+        return false;
+    }
         return true;
     }
 
-    private void SalvarAluno(object? sender, EventArgs args) {
+    private void SalvarProduto(object? sender, EventArgs args) {
         if (!ValidarCampos())
             return;
+        
+        string codigo = txtCodigo.Text.Trim();
         string nome = txtNome.Text.Trim();
-        string matricula = txtMatricula.Text.Trim();
-        string curso = cmbCurso.SelectedItem?.ToString() ?? "";
-        bool novoCadastro = alunoEmEdicao is null;
+        string categoria = cmbCategoriaForm.SelectedItem?.ToString() ?? "";
+        double preco = double.Parse(txtPreco.Text.Trim());
+        int estoque = (int)numEstoque.Value;
+        DateTime dataCadastro = dtpDataCadastro.Value;
+        bool ativo = rdbAtivo.Checked;
+        bool emPromocao = chkPromocao.Checked;
+        bool novoCadastro = produtoEmEdicao is null;
 
 
-        if (alunoEmEdicao is null) {
-            alunos.Add(new Aluno {
+        if (produtoEmEdicao is null) {
+            produtos.Add(new Produto {
+                Codigo = codigo,
                 Nome = nome,
-                Matricula = matricula,
-                Curso = curso
+                Categoria = categoria,
+                Preco = preco,
+                Estoque = estoque,
+                DataCadastro = dataCadastro,
+                Ativo = ativo,
+                EmPromocao = emPromocao
             });
         }
         else {
-            alunoEmEdicao.Nome = nome;
-            alunoEmEdicao.Matricula = matricula;
-            alunoEmEdicao.Curso = curso;
-            alunos.ResetItem(alunos.IndexOf(alunoEmEdicao));
+        produtoEmEdicao.Codigo = codigo;
+        produtoEmEdicao.Nome = nome;
+        produtoEmEdicao.Categoria = categoria;
+        produtoEmEdicao.Preco = preco;
+        produtoEmEdicao.Estoque = estoque;
+        produtoEmEdicao.DataCadastro = dataCadastro;
+        produtoEmEdicao.Ativo = ativo;
+        produtoEmEdicao.EmPromocao = emPromocao;
+        
+        produtos.ResetItem(produtos.IndexOf(produtoEmEdicao));
         }
         PrepararNovo();
-        lblStatus.Text = novoCadastro
-        ? "Registro salvo em memória."
-        : "Registro atualizado.";
+        if(novoCadastro)
+            MessageBox.Show($"Produto '{nome}' cadastrado!", "Sucesso no Cadastro", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
-    private void SelecionarAluno(object? sender, DataGridViewCellEventArgs args) {
+    private void SelecionarProduto(object? sender, DataGridViewCellEventArgs args) {
         if (args.RowIndex < 0)
             return;
-        var aluno = grade.Rows[args.RowIndex].DataBoundItem as Aluno;
-        if (aluno is null)
+
+        var produto = grade.Rows[args.RowIndex].DataBoundItem as Produto;
+        if (produto is null)
             return;
-        alunoEmEdicao = aluno;
-        txtNome.Text = alunoEmEdicao.Nome;
-        txtMatricula.Text = alunoEmEdicao.Matricula;
-        cmbCurso.SelectedItem = alunoEmEdicao.Curso;
+
+        produtoEmEdicao = produto;
+
+        txtCodigo.Text = produtoEmEdicao.Codigo;
+        txtNome.Text = produtoEmEdicao.Nome;
+        txtPreco.Text = produtoEmEdicao.Preco.ToString("F2");
+        cmbCategoriaForm.SelectedItem = produtoEmEdicao.Categoria;
+        numEstoque.Value = produtoEmEdicao.Estoque;
+        dtpDataCadastro.Value = produtoEmEdicao.DataCadastro;
+
+        if (produtoEmEdicao.Ativo) {
+        rdbAtivo.Checked = true;
+        } else {
+            rdbInativo.Checked = true;
+        }
+        chkPromocao.Checked = produtoEmEdicao.EmPromocao;
+
         btnSalvar.Text = "Atualizar";
         btnExcluir.Enabled = true;
         erros.Clear();
-        lblStatus.Text = "Editando o aluno selecionado.";
     }
 
-    private void ExcluirAluno(object? sender, EventArgs args) {
-        if (alunoEmEdicao is null)
+    private void ExcluirProduto(object? sender, EventArgs args) {
+        if (produtoEmEdicao is null)
             return;
         DialogResult resposta = MessageBox.Show(this,
-        $"Excluir {alunoEmEdicao.Nome}?", "Confirmar exclusão",
+        $"Excluir {produtoEmEdicao.Nome}?", "Confirmar exclusão",
         MessageBoxButtons.YesNo, MessageBoxIcon.Question,
         MessageBoxDefaultButton.Button2);
         if (resposta != DialogResult.Yes)
             return;
-        alunos.Remove(alunoEmEdicao);
+        produtos.Remove(produtoEmEdicao);
         PrepararNovo();
-        lblStatus.Text = "Registro excluído.";
     }
 
     protected override void Dispose(bool disposing) {

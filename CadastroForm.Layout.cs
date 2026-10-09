@@ -27,7 +27,12 @@ public partial class CadastroForm {
         AutoSize = true,
         TabIndex = 1
     };
-    private readonly DataGridView grade = new() {
+    private readonly Label lblResultado = new Label() { 
+        Text = "X produtos encontrados", 
+        AutoSize = true 
+};
+    private readonly DataGridView grade = new()
+    {
         Dock = DockStyle.Fill,
         ReadOnly = true,
         TabIndex = 4,
@@ -139,7 +144,6 @@ public partial class CadastroForm {
         });
         cmbCategoria.SelectedIndex = 0;
 
-        cmbCategoriaForm.Items.Add("Todas");
         cmbCategoriaForm.Items.AddRange(new object[] {
             "Acessórios", "Periféricos",
         });
@@ -164,7 +168,7 @@ public partial class CadastroForm {
         };
 
         layout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-        layout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         layout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
 
@@ -194,8 +198,7 @@ public partial class CadastroForm {
 
         layout.Controls.Add(txtPesquisa, 0, 1);
         layout.Controls.Add(cmbCategoria, 1, 1);
-
-        layout.Controls.Add(chkAtivo, 2, 1);
+        layout.Controls.Add(chkAtivo, 3, 1);
 
         var botoesPesquisa = new FlowLayoutPanel {
             Dock = DockStyle.Fill,
@@ -249,7 +252,6 @@ public partial class CadastroForm {
 
 
         layout.Controls.Add(botoes, 0, 9);
-        layout.SetColumnSpan(botoes, 3);
 
 
         var botoesCancelar = new FlowLayoutPanel {
@@ -263,7 +265,6 @@ public partial class CadastroForm {
         });
 
         layout.Controls.Add(botoesCancelar, 3, 9);
-        layout.SetColumnSpan(botoesCancelar, 3);
 
         Controls.Add(layout);
     }
