@@ -1,7 +1,6 @@
 namespace CatalogoProdutos;
 
 public partial class CadastroForm {
-
     private readonly TextBox txtPesquisa = new() {
         Dock = DockStyle.Fill,
         MaxLength = 100,
@@ -18,7 +17,6 @@ public partial class CadastroForm {
         AutoSize = true,
         TabIndex = 2
     };
-
     private readonly Button btnPesquisar = new() {
         Text = "Pesquisar",
         AutoSize = true,
@@ -29,11 +27,10 @@ public partial class CadastroForm {
         AutoSize = true,
         TabIndex = 1
     };
-
     private readonly DataGridView grade = new() {
         Dock = DockStyle.Fill,
         ReadOnly = true,
-        TabIndex = 3,
+        TabIndex = 4,
         AllowUserToAddRows = false,
         AllowUserToDeleteRows = false,
         MultiSelect = false,
@@ -42,78 +39,73 @@ public partial class CadastroForm {
         AutoGenerateColumns = true,
         AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
     };
-
     private readonly TextBox txtCodigo = new() {
-        Dock = DockStyle.Fill,
-        MaxLength = 100,
-        TabIndex = 4
-    };
-    private readonly TextBox txtNome = new() {
         Dock = DockStyle.Fill,
         MaxLength = 100,
         TabIndex = 5
     };
-    private readonly NumericUpDown numEstoque = new() {
+    private readonly ComboBox cmbCategoriaForm = new() {
         Dock = DockStyle.Fill,
         TabIndex = 6,
+        DropDownStyle = ComboBoxStyle.DropDownList
+    };
+    private readonly TextBox txtNome = new() {
+        Dock = DockStyle.Fill,
+        MaxLength = 100,
+        TabIndex = 7
+    };
+    private readonly TextBox txtPreco = new() {
+        Dock = DockStyle.Fill,
+        MaxLength = 100,
+        TabIndex = 8
+    };
+    private readonly NumericUpDown numEstoque = new() {
+        Dock = DockStyle.Fill,
+        TabIndex = 9,
         Minimum = 0,
         Maximum = 9999,
         Increment = 1,
         Value = 0
     };
-
+    private readonly DateTimePicker dtpDataCadastro = new() {
+        Dock = DockStyle.Fill,
+        Format = DateTimePickerFormat.Short,
+        TabIndex = 10
+    };
     private readonly RadioButton rdbAtivo = new() {
         Text = "Ativo",
         AutoSize = true,
         Checked = true,
         TabIndex = 0
     };
-
     private readonly RadioButton rdbInativo = new() {
         Text = "Inativo",
         AutoSize = true,
         TabIndex = 1
     };
-
     private readonly FlowLayoutPanel painelSituacao = new() {
         Dock = DockStyle.Fill,
         AutoSize = true,
         FlowDirection = FlowDirection.LeftToRight,
-        Margin = new Padding(0)
-    };
-
-    private readonly ComboBox cmbCategoriaForm = new() {
-        Dock = DockStyle.Fill,
-        TabIndex = 7,
-        DropDownStyle = ComboBoxStyle.DropDownList
-    };
-
-    private readonly TextBox txtPreco = new() {
-        Dock = DockStyle.Fill,
-        MaxLength = 100,
-        TabIndex = 8
-    };
-    private readonly TextBox txtDataCadastro = new() {
-        Dock = DockStyle.Fill,
-        MaxLength = 100,
-        TabIndex = 9
+        Margin = new Padding(0),
+        TabIndex = 11
     };
 
         private readonly CheckBox chkPromocao = new() {
         Text = "Produto em Promoção",
         AutoSize = true,
-        TabIndex = 10
+        TabIndex = 12
     };
 
     private readonly Button btnNovo = new() {
         Text = "Novo",
         AutoSize = true,
-        TabIndex = 1
+        TabIndex = 0
     };
     private readonly Button btnSalvar = new() {
         Text = "Salvar",
         AutoSize = true,
-        TabIndex = 0
+        TabIndex = 1
     };
     private readonly Button btnExcluir = new() {
         Text = "Excluir",
@@ -123,18 +115,12 @@ public partial class CadastroForm {
     private readonly Button btnCancelar = new() {
         Text = "Cancelar",
         AutoSize = true,
-        TabIndex = 2
+        TabIndex = 0
     };
     private readonly Button btnFechar = new() {
         Text = "Fechar",
         AutoSize = true,
-        TabIndex = 2
-    };
-
-    private readonly Label lblStatus = new() {
-        Text = "Preencha os dados do Produto.",
-        AutoSize = true,
-        Dock = DockStyle.Fill
+        TabIndex = 1
     };
 
     private readonly ErrorProvider erros = new();
@@ -201,7 +187,7 @@ public partial class CadastroForm {
         numEstoque.Margin = new Padding(3, 3, 24, 3);
         cmbCategoriaForm.Margin = new Padding(3, 3, 24, 3);
         txtPreco.Margin = new Padding(3, 3, 24, 3);
-        txtDataCadastro.Margin = new Padding(3, 3, 24, 3);
+        dtpDataCadastro.Margin = new Padding(3, 3, 24, 3);
 
         layout.Controls.Add(lblPesquisa, 0, 0);
         layout.Controls.Add(lblCategoria, 1, 0);
@@ -214,7 +200,7 @@ public partial class CadastroForm {
         var botoesPesquisa = new FlowLayoutPanel {
             Dock = DockStyle.Fill,
             AutoSize = true,
-            TabIndex = 2
+            TabIndex = 3
         };
 
         botoesPesquisa.Controls.AddRange(new Control[]{
@@ -244,16 +230,17 @@ public partial class CadastroForm {
         layout.Controls.Add(lblEstoque, 0, 7);
         layout.Controls.Add(numEstoque, 1, 7);
         layout.Controls.Add(lblCadastro, 2, 7);
-        layout.Controls.Add(txtDataCadastro, 3, 7);
+        layout.Controls.Add(dtpDataCadastro, 3, 7);
         
         layout.Controls.Add(lblSituacao, 0, 8);
+        painelSituacao.Controls.AddRange(new Control[] { rdbAtivo, rdbInativo });
         layout.Controls.Add(painelSituacao, 1, 8);
         layout.Controls.Add(chkPromocao, 3, 8);
 
         var botoes = new FlowLayoutPanel {
             Dock = DockStyle.Fill,
             AutoSize = true,
-            TabIndex = 2
+            TabIndex = 13
         };
 
         botoes.Controls.AddRange(new Control[]{
@@ -268,7 +255,7 @@ public partial class CadastroForm {
         var botoesCancelar = new FlowLayoutPanel {
             Dock = DockStyle.Fill,
             AutoSize = true,
-            TabIndex = 2
+            TabIndex = 14
         };
 
         botoesCancelar.Controls.AddRange(new Control[]{
@@ -278,10 +265,6 @@ public partial class CadastroForm {
         layout.Controls.Add(botoesCancelar, 3, 9);
         layout.SetColumnSpan(botoesCancelar, 3);
 
-
-
-        layout.Controls.Add(lblStatus, 0, 10);
-        layout.SetColumnSpan(lblStatus, 2);
         Controls.Add(layout);
     }
 }
