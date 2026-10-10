@@ -151,7 +151,7 @@ public partial class CadastroForm {
 
         var lblPesquisa = new Label { Text = "Pesquisar por nome ou código:", AutoSize = true };
         var lblCategoria = new Label { Text = "Categoria:", AutoSize = true };
-        var lblResultado = new Label { Text = "X produtos encontrados", AutoSize = true };
+       
         var lblDadosProduto = new Label { Text = "Dados do Produto", AutoSize = true };
         var lblCodigo = new Label { Text = "Codigo:", AutoSize = true };
         var lblNome = new Label { Text = "Nome:", AutoSize = true };
