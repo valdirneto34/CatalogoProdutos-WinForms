@@ -73,7 +73,7 @@ public partial class CadastroForm : Form {
 
         btnSalvar.Text = "Salvar";
         btnExcluir.Enabled = false;
-        txtNome.Focus();
+        txtCodigo.Focus();
     }
     private bool ValidarCampos() {
         erros.Clear();

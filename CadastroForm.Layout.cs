@@ -157,6 +157,7 @@ public partial class CadastroForm {
         var lblNome = new Label { Text = "Nome:", AutoSize = true };
         var lblEstoque = new Label { Text = "Estoque:", AutoSize = true };
         var lblSituacao = new Label { Text = "Situação:", AutoSize = true };
+        var lblCategoriaForm = new Label { Text = "Categoria:", AutoSize = true };
         var lblPreco = new Label { Text = "Preço:", AutoSize = true };
         var lblCadastro = new Label { Text = "Cadastro:", AutoSize = true };
 
@@ -212,7 +213,6 @@ public partial class CadastroForm {
 
         layout.Controls.Add(botoesPesquisa, 0, 2);
         layout.SetColumnSpan(botoesPesquisa, 3);
-
         layout.Controls.Add(lblResultado, 3, 2);
 
         layout.Controls.Add(grade, 0, 3);
@@ -222,8 +222,8 @@ public partial class CadastroForm {
 
         layout.Controls.Add(lblCodigo, 0, 5);
         layout.Controls.Add(txtCodigo, 1, 5);
-        layout.Controls.Add(lblCategoria, 2, 5);
-        layout.Controls.Add(cmbCategoria, 3, 5);
+        layout.Controls.Add(lblCategoriaForm, 2, 5);
+        layout.Controls.Add(cmbCategoriaForm, 3, 5);
 
         layout.Controls.Add(lblNome, 0, 6);
         layout.Controls.Add(txtNome, 1, 6);
@@ -245,13 +245,11 @@ public partial class CadastroForm {
             AutoSize = true,
             TabIndex = 13
         };
-
         botoes.Controls.AddRange(new Control[]{
         btnNovo, btnSalvar, btnExcluir
         });
-
-
         layout.Controls.Add(botoes, 0, 9);
+        layout.SetColumnSpan(botoes, 3);
 
 
         var botoesCancelar = new FlowLayoutPanel {
@@ -259,11 +257,9 @@ public partial class CadastroForm {
             AutoSize = true,
             TabIndex = 14
         };
-
         botoesCancelar.Controls.AddRange(new Control[]{
         btnCancelar, btnFechar
         });
-
         layout.Controls.Add(botoesCancelar, 3, 9);
 
         Controls.Add(layout);
