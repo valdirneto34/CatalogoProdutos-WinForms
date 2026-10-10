@@ -29,7 +29,7 @@ public partial class CadastroForm {
         TabIndex = 1
     };
     private readonly Label lblResultado = new Label() { 
-        Text = "", 
+        Text = "Nenhum produto cadastrado", 
         AutoSize = true,
         Anchor = AnchorStyles.Right
 };
