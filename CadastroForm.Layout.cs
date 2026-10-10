@@ -15,7 +15,8 @@ public partial class CadastroForm {
     private readonly CheckBox chkAtivo = new() {
         Text = "Somente em estoque",
         AutoSize = true,
-        TabIndex = 2
+        TabIndex = 2,
+        Anchor = AnchorStyles.Right
     };
     private readonly Button btnPesquisar = new() {
         Text = "Pesquisar",
@@ -28,8 +29,9 @@ public partial class CadastroForm {
         TabIndex = 1
     };
     private readonly Label lblResultado = new Label() { 
-        Text = "X produtos encontrados", 
-        AutoSize = true 
+        Text = "", 
+        AutoSize = true,
+        Anchor = AnchorStyles.Right
 };
     private readonly DataGridView grade = new()
     {
@@ -206,13 +208,12 @@ public partial class CadastroForm {
             AutoSize = true,
             TabIndex = 3
         };
-
         botoesPesquisa.Controls.AddRange(new Control[]{
         btnPesquisar, btnLimparFiltros
         });
 
         layout.Controls.Add(botoesPesquisa, 0, 2);
-        layout.SetColumnSpan(botoesPesquisa, 3);
+        layout.SetColumnSpan(botoesPesquisa, 2);
         layout.Controls.Add(lblResultado, 3, 2);
 
         layout.Controls.Add(grade, 0, 3);
@@ -255,10 +256,11 @@ public partial class CadastroForm {
         var botoesCancelar = new FlowLayoutPanel {
             Dock = DockStyle.Fill,
             AutoSize = true,
-            TabIndex = 14
+            TabIndex = 14,
+            FlowDirection = FlowDirection.RightToLeft
         };
         botoesCancelar.Controls.AddRange(new Control[]{
-        btnCancelar, btnFechar
+        btnFechar, btnCancelar
         });
         layout.Controls.Add(botoesCancelar, 3, 9);
 

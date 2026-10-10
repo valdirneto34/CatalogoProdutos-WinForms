@@ -21,6 +21,9 @@ public partial class CadastroForm : Form {
         btnSalvar.Click += SalvarProduto;
         btnExcluir.Click += ExcluirProduto;
         grade.CellClick += SelecionarProduto;
+
+        btnCancelar.Click += NovoProduto;
+        btnFechar.Click += (s, e) => Close();
     }
 
     private void PesquisarProduto(object? sender, EventArgs args) {
@@ -49,6 +52,12 @@ public partial class CadastroForm : Form {
         chkAtivo.Checked = false;
         grade.DataSource = produtos;
         txtPesquisa.Focus();
+
+        if (produtos.Count == 0) {
+            lblResultado.Text = "";
+        } else {
+            lblResultado.Text = $"{produtos.Count} produtos encontrados";
+        }
     }
 
     private void NovoProduto(object? sender, EventArgs args) {
@@ -173,7 +182,7 @@ public partial class CadastroForm : Form {
         dtpDataCadastro.Value = produtoEmEdicao.DataCadastro;
 
         if (produtoEmEdicao.Ativo) {
-        rdbAtivo.Checked = true;
+            rdbAtivo.Checked = true;
         } else {
             rdbInativo.Checked = true;
         }
@@ -187,12 +196,15 @@ public partial class CadastroForm : Form {
     private void ExcluirProduto(object? sender, EventArgs args) {
         if (produtoEmEdicao is null)
             return;
+        
         DialogResult resposta = MessageBox.Show(this,
         $"Excluir {produtoEmEdicao.Nome}?", "Confirmar exclusão",
         MessageBoxButtons.YesNo, MessageBoxIcon.Question,
         MessageBoxDefaultButton.Button2);
+
         if (resposta != DialogResult.Yes)
             return;
+        
         produtos.Remove(produtoEmEdicao);
         PrepararNovo();
     }
