@@ -18,16 +18,6 @@ public partial class CadastroForm {
         TabIndex = 2,
         Anchor = AnchorStyles.Right
     };
-    private readonly Button btnPesquisar = new() {
-        Text = "Pesquisar",
-        AutoSize = true,
-        TabIndex = 0
-    };
-    private readonly Button btnLimparFiltros = new() {
-        Text = "Limpar Filtros",
-        AutoSize = true,
-        TabIndex = 1
-    };
     private readonly Label lblResultado = new Label() { 
         Text = "", 
         AutoSize = true,
@@ -203,17 +193,6 @@ public partial class CadastroForm {
         layout.Controls.Add(cmbCategoria, 1, 1);
         layout.Controls.Add(chkAtivo, 3, 1);
 
-        var botoesPesquisa = new FlowLayoutPanel {
-            Dock = DockStyle.Fill,
-            AutoSize = true,
-            TabIndex = 3
-        };
-        botoesPesquisa.Controls.AddRange(new Control[]{
-        btnPesquisar, btnLimparFiltros
-        });
-
-        layout.Controls.Add(botoesPesquisa, 0, 2);
-        layout.SetColumnSpan(botoesPesquisa, 2);
         layout.Controls.Add(lblResultado, 3, 2);
 
         layout.Controls.Add(grade, 0, 3);

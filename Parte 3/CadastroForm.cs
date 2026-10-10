@@ -14,13 +14,16 @@ public partial class CadastroForm : Form {
     }
 
     private void ConectarEventos() {
-        btnPesquisar.Click += PesquisarProduto;
-        btnLimparFiltros.Click += LimparFiltros;
+        txtPesquisa.TextChanged += PesquisarProduto;
+        cmbCategoria.SelectedIndexChanged += PesquisarProduto;
+        chkAtivo.CheckedChanged += PesquisarProduto;
 
         btnNovo.Click += NovoProduto;
         btnSalvar.Click += SalvarProduto;
         btnExcluir.Click += ExcluirProduto;
+
         grade.CellClick += SelecionarProduto;
+        grade.CellFormatting += FormatarGradeEstoque;
 
         btnCancelar.Click += NovoProduto;
         btnFechar.Click += (s, e) => Close();
@@ -46,19 +49,24 @@ public partial class CadastroForm : Form {
         grade.DataSource = produtosEncontrados;
     }
 
-    private void LimparFiltros(object? sender, EventArgs args) {
-        txtPesquisa.Clear();
-        cmbCategoria.SelectedIndex = 0;
-        chkAtivo.Checked = false;
-        grade.DataSource = produtos;
-        txtPesquisa.Focus();
-
-        if (produtos.Count == 0) {
-            lblResultado.Text = "";
-        } else {
-            lblResultado.Text = $"{produtos.Count} produtos encontrados";
+    private void FormatarGradeEstoque(object? sender, DataGridViewCellFormattingEventArgs e) {
+        if (e.RowIndex >= 0) {
+            var produto = grade.Rows[e.RowIndex].DataBoundItem as Produto;
+            
+            if (produto != null) {
+                if (produto.Estoque == 0) {
+                    grade.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightCoral; 
+                }
+                else if (produto.Estoque >= 1 && produto.Estoque <= 5) {
+                    grade.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightYellow;
+                }
+                else {
+                    grade.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.White;
+                }
+            }
         }
     }
+
 
     private void NovoProduto(object? sender, EventArgs args) {
         PrepararNovo();
@@ -160,8 +168,6 @@ public partial class CadastroForm : Form {
         produtos.ResetItem(produtos.IndexOf(produtoEmEdicao));
         }
         PrepararNovo();
-        if(novoCadastro)
-            MessageBox.Show($"Produto '{nome}' cadastrado!", "Sucesso no Cadastro", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     private void SelecionarProduto(object? sender, DataGridViewCellEventArgs args) {
