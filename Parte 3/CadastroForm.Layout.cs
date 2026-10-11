@@ -1,28 +1,47 @@
 namespace CatalogoProdutos;
 
-public partial class CadastroForm {
-    private readonly TextBox txtPesquisa = new() {
+public partial class CadastroForm
+{
+    private readonly PictureBox picImagem = new()
+    {
+        Dock = DockStyle.Fill,
+        SizeMode = PictureBoxSizeMode.Zoom,
+        BorderStyle = BorderStyle.FixedSingle,
+        MinimumSize = new Size(100, 100)
+    };
+
+    private readonly Button btnSelecionarImagem = new()
+    {
+        Text = "Selecionar uma Imagem",
+        AutoSize = true,
+        Anchor = AnchorStyles.Left
+    };
+    private readonly TextBox txtPesquisa = new()
+    {
         Dock = DockStyle.Fill,
         MaxLength = 100,
         TabIndex = 0,
         PlaceholderText = "Digite para pesquisar..."
     };
-    private readonly ComboBox cmbCategoria = new() {
+    private readonly ComboBox cmbCategoria = new()
+    {
         Dock = DockStyle.Fill,
         TabIndex = 1,
         DropDownStyle = ComboBoxStyle.DropDownList
     };
-    private readonly CheckBox chkAtivo = new() {
+    private readonly CheckBox chkAtivo = new()
+    {
         Text = "Somente em estoque",
         AutoSize = true,
         TabIndex = 2,
         Anchor = AnchorStyles.Right
     };
-    private readonly Label lblResultado = new Label() { 
-        Text = "", 
+    private readonly Label lblResultado = new Label()
+    {
+        Text = "",
         AutoSize = true,
         Anchor = AnchorStyles.Right
-};
+    };
     private readonly DataGridView grade = new()
     {
         Dock = DockStyle.Fill,
@@ -36,27 +55,32 @@ public partial class CadastroForm {
         AutoGenerateColumns = true,
         AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
     };
-    private readonly TextBox txtCodigo = new() {
+    private readonly TextBox txtCodigo = new()
+    {
         Dock = DockStyle.Fill,
         MaxLength = 100,
         TabIndex = 5
     };
-    private readonly ComboBox cmbCategoriaForm = new() {
+    private readonly ComboBox cmbCategoriaForm = new()
+    {
         Dock = DockStyle.Fill,
         TabIndex = 6,
         DropDownStyle = ComboBoxStyle.DropDownList
     };
-    private readonly TextBox txtNome = new() {
+    private readonly TextBox txtNome = new()
+    {
         Dock = DockStyle.Fill,
         MaxLength = 100,
         TabIndex = 7
     };
-    private readonly TextBox txtPreco = new() {
+    private readonly TextBox txtPreco = new()
+    {
         Dock = DockStyle.Fill,
         MaxLength = 100,
         TabIndex = 8
     };
-    private readonly NumericUpDown numEstoque = new() {
+    private readonly NumericUpDown numEstoque = new()
+    {
         Dock = DockStyle.Fill,
         TabIndex = 9,
         Minimum = 0,
@@ -64,23 +88,27 @@ public partial class CadastroForm {
         Increment = 1,
         Value = 0
     };
-    private readonly DateTimePicker dtpDataCadastro = new() {
+    private readonly DateTimePicker dtpDataCadastro = new()
+    {
         Dock = DockStyle.Fill,
         Format = DateTimePickerFormat.Short,
         TabIndex = 10
     };
-    private readonly RadioButton rdbAtivo = new() {
+    private readonly RadioButton rdbAtivo = new()
+    {
         Text = "Ativo",
         AutoSize = true,
         Checked = true,
         TabIndex = 0
     };
-    private readonly RadioButton rdbInativo = new() {
+    private readonly RadioButton rdbInativo = new()
+    {
         Text = "Inativo",
         AutoSize = true,
         TabIndex = 1
     };
-    private readonly FlowLayoutPanel painelSituacao = new() {
+    private readonly FlowLayoutPanel painelSituacao = new()
+    {
         Dock = DockStyle.Fill,
         AutoSize = true,
         FlowDirection = FlowDirection.LeftToRight,
@@ -88,33 +116,58 @@ public partial class CadastroForm {
         TabIndex = 11
     };
 
-        private readonly CheckBox chkPromocao = new() {
+    private readonly CheckBox chkPromocao = new()
+    {
         Text = "Produto em Promoção",
         AutoSize = true,
         TabIndex = 12
     };
 
-    private readonly Button btnNovo = new() {
+    private readonly NumericUpDown numDesconto = new()
+    {
+        Dock = DockStyle.Fill,
+        Minimum = 1,
+        Maximum = 70,
+        Value = 1,
+        Visible = false, 
+        TabIndex = 13
+    };
+
+    private readonly Label lblPrecoFinal = new()
+    {
+        Text = "",
+        AutoSize = true,
+        Visible = false, // Começa invisível
+        ForeColor = Color.DarkGreen, // Cor para destacar o preço
+        Font = new Font("Segoe UI", 9F, FontStyle.Bold)
+    };
+
+    private readonly Button btnNovo = new()
+    {
         Text = "Novo",
         AutoSize = true,
         TabIndex = 0
     };
-    private readonly Button btnSalvar = new() {
+    private readonly Button btnSalvar = new()
+    {
         Text = "Salvar",
         AutoSize = true,
         TabIndex = 1
     };
-    private readonly Button btnExcluir = new() {
+    private readonly Button btnExcluir = new()
+    {
         Text = "Excluir",
         AutoSize = true,
         TabIndex = 2
     };
-    private readonly Button btnCancelar = new() {
+    private readonly Button btnCancelar = new()
+    {
         Text = "Cancelar",
         AutoSize = true,
         TabIndex = 0
     };
-    private readonly Button btnFechar = new() {
+    private readonly Button btnFechar = new()
+    {
         Text = "Fechar",
         AutoSize = true,
         TabIndex = 1
@@ -122,7 +175,8 @@ public partial class CadastroForm {
 
     private readonly ErrorProvider erros = new();
 
-    private void MontarTela() {
+    private void MontarTela()
+    {
         Text = "Cadastro Produtos";
         ClientSize = new Size(760, 480);
         MinimumSize = new Size(600, 400);
@@ -143,7 +197,7 @@ public partial class CadastroForm {
 
         var lblPesquisa = new Label { Text = "Pesquisar por nome ou código:", AutoSize = true };
         var lblCategoria = new Label { Text = "Categoria:", AutoSize = true };
-       
+
         var lblDadosProduto = new Label { Text = "Dados do Produto", AutoSize = true };
         var lblCodigo = new Label { Text = "Codigo:", AutoSize = true };
         var lblNome = new Label { Text = "Nome:", AutoSize = true };
@@ -153,11 +207,12 @@ public partial class CadastroForm {
         var lblPreco = new Label { Text = "Preço:", AutoSize = true };
         var lblCadastro = new Label { Text = "Cadastro:", AutoSize = true };
 
-        var layout = new TableLayoutPanel {
+        var layout = new TableLayoutPanel
+        {
             Dock = DockStyle.Fill,
             Padding = new Padding(12),
             ColumnCount = 4,
-            RowCount = 11
+            RowCount = 12
         };
 
         layout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
@@ -176,6 +231,7 @@ public partial class CadastroForm {
         layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
 
         txtPesquisa.Margin = new Padding(3, 3, 24, 3);
         cmbCategoria.Margin = new Padding(3, 3, 24, 3);
@@ -185,6 +241,7 @@ public partial class CadastroForm {
         cmbCategoriaForm.Margin = new Padding(3, 3, 24, 3);
         txtPreco.Margin = new Padding(3, 3, 24, 3);
         dtpDataCadastro.Margin = new Padding(3, 3, 24, 3);
+        numDesconto.Margin = new Padding(3, 3, 24, 3);
 
         layout.Controls.Add(lblPesquisa, 0, 0);
         layout.Controls.Add(lblCategoria, 1, 0);
@@ -214,34 +271,47 @@ public partial class CadastroForm {
         layout.Controls.Add(numEstoque, 1, 7);
         layout.Controls.Add(lblCadastro, 2, 7);
         layout.Controls.Add(dtpDataCadastro, 3, 7);
-        
+
         layout.Controls.Add(lblSituacao, 0, 8);
         painelSituacao.Controls.AddRange(new Control[] { rdbAtivo, rdbInativo });
         layout.Controls.Add(painelSituacao, 1, 8);
-        layout.Controls.Add(chkPromocao, 3, 8);
 
-        var botoes = new FlowLayoutPanel {
+
+        layout.Controls.Add(chkPromocao, 2, 8);
+        layout.Controls.Add(numDesconto, 3, 8);
+
+        layout.Controls.Add(lblPrecoFinal, 2, 9);
+        layout.SetColumnSpan(lblPrecoFinal, 2);
+
+        var lblImagem = new Label { Text = "Imagem:", AutoSize = true };
+        layout.Controls.Add(lblImagem, 0, 10);
+        layout.Controls.Add(picImagem, 1, 10);
+        layout.Controls.Add(btnSelecionarImagem, 2, 9);
+
+        var botoes = new FlowLayoutPanel
+        {
             Dock = DockStyle.Fill,
             AutoSize = true,
-            TabIndex = 13
+            TabIndex = 14
         };
         botoes.Controls.AddRange(new Control[]{
         btnNovo, btnSalvar, btnExcluir
         });
-        layout.Controls.Add(botoes, 0, 9);
+        layout.Controls.Add(botoes, 0, 11);
         layout.SetColumnSpan(botoes, 3);
 
 
-        var botoesCancelar = new FlowLayoutPanel {
+        var botoesCancelar = new FlowLayoutPanel
+        {
             Dock = DockStyle.Fill,
             AutoSize = true,
-            TabIndex = 14,
+            TabIndex = 15,
             FlowDirection = FlowDirection.RightToLeft
         };
         botoesCancelar.Controls.AddRange(new Control[]{
         btnFechar, btnCancelar
         });
-        layout.Controls.Add(botoesCancelar, 3, 9);
+        layout.Controls.Add(botoesCancelar, 3, 11);
 
         Controls.Add(layout);
     }

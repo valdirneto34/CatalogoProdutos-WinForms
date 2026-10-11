@@ -5,6 +5,7 @@ public partial class CadastroForm : Form
 {
     private readonly BindingList<Produto> produtos = new();
     private Produto? produtoEmEdicao;
+    private string caminhoImagemAtual = "";
 
     public CadastroForm()
     {
@@ -27,6 +28,12 @@ public partial class CadastroForm : Form
 
         grade.CellClick += SelecionarProduto;
         grade.CellFormatting += FormatarGradeEstoque;
+
+        chkPromocao.CheckedChanged += MudancaPromocao;
+        numDesconto.ValueChanged += CalcularPrecoFinal;
+        txtPreco.TextChanged += CalcularPrecoFinal;
+
+        btnSelecionarImagem.Click += EscolherImagem;
 
         btnCancelar.Click += CancelarEdicao;
         btnFechar.Click += (s, e) => Close();
@@ -101,8 +108,15 @@ public partial class CadastroForm : Form
         grade.ClearSelection();
         erros.Clear();
 
+        numDesconto.Value = 1;
+        lblPrecoFinal.Text = "";
+
+        caminhoImagemAtual = "";
+        picImagem.ImageLocation = null;
+
         btnSalvar.Text = "Salvar";
         btnExcluir.Enabled = false;
+
         txtCodigo.Focus();
     }
     private bool ValidarCampos()
@@ -156,6 +170,31 @@ public partial class CadastroForm : Form
         return true;
     }
 
+    private void MudancaPromocao(object? sender, EventArgs e)
+    {
+        bool emPromocao = chkPromocao.Checked;
+        numDesconto.Visible = emPromocao;
+        lblPrecoFinal.Visible = emPromocao;
+
+        CalcularPrecoFinal();
+    }
+
+    private void CalcularPrecoFinal(object? sender = null, EventArgs? e = null)
+    {
+        if (chkPromocao.Checked && double.TryParse(txtPreco.Text.Trim(), out double precoAtual))
+        {
+            double percentual = (double)numDesconto.Value;
+            double valorDesconto = precoAtual * (percentual / 100.0);
+            double precoFinal = precoAtual - valorDesconto;
+
+            lblPrecoFinal.Text = $"Preço com desconto: R$ {precoFinal:F2}";
+        }
+        else
+        {
+            lblPrecoFinal.Text = "";
+        }
+    }
+
     private void SalvarProduto(object? sender, EventArgs args)
     {
         if (!ValidarCampos())
@@ -165,6 +204,12 @@ public partial class CadastroForm : Form
         string nome = txtNome.Text.Trim();
         string categoria = cmbCategoriaForm.SelectedItem?.ToString() ?? "";
         double preco = double.Parse(txtPreco.Text.Trim());
+        if (chkPromocao.Checked)
+        {
+            double percentual = (double)numDesconto.Value;
+            preco = preco - (preco * (percentual / 100.0));
+        }
+
         int estoque = (int)numEstoque.Value;
         DateTime dataCadastro = dtpDataCadastro.Value;
         bool ativo = rdbAtivo.Checked;
@@ -183,7 +228,8 @@ public partial class CadastroForm : Form
                 Estoque = estoque,
                 DataCadastro = dataCadastro,
                 Ativo = ativo,
-                EmPromocao = emPromocao
+                EmPromocao = emPromocao,
+                CaminhoImagem = caminhoImagemAtual
             });
         }
         else
@@ -196,6 +242,7 @@ public partial class CadastroForm : Form
             produtoEmEdicao.DataCadastro = dataCadastro;
             produtoEmEdicao.Ativo = ativo;
             produtoEmEdicao.EmPromocao = emPromocao;
+            produtoEmEdicao.CaminhoImagem = caminhoImagemAtual;
 
             produtos.ResetItem(produtos.IndexOf(produtoEmEdicao));
         }
@@ -219,6 +266,16 @@ public partial class CadastroForm : Form
         cmbCategoriaForm.SelectedItem = produtoEmEdicao.Categoria;
         numEstoque.Value = produtoEmEdicao.Estoque;
         dtpDataCadastro.Value = produtoEmEdicao.DataCadastro;
+
+        caminhoImagemAtual = produtoEmEdicao.CaminhoImagem;
+        if (!string.IsNullOrEmpty(caminhoImagemAtual) && System.IO.File.Exists(caminhoImagemAtual))
+        {
+            picImagem.ImageLocation = caminhoImagemAtual;
+        }
+        else
+        {
+            picImagem.ImageLocation = null;
+        }
 
         if (produtoEmEdicao.Ativo)
         {
@@ -252,10 +309,24 @@ public partial class CadastroForm : Form
         PrepararNovo();
     }
 
-     private void CancelarEdicao(object? sender, EventArgs args)
+    private void CancelarEdicao(object? sender, EventArgs args)
     {
         if (produtoEmEdicao != null)
             PrepararNovo();
+    }
+
+    private void EscolherImagem(object? sender, EventArgs e)
+    {
+        using OpenFileDialog ofd = new OpenFileDialog();
+        // Filtro para aceitar apenas PNG ou JPG, conforme o PDF
+        ofd.Filter = "Imagens (*.png;*.jpg;*.jpeg)|*.png;*.jpg;*.jpeg";
+        ofd.Title = "Selecione a imagem do produto";
+
+        if (ofd.ShowDialog() == DialogResult.OK)
+        {
+            caminhoImagemAtual = ofd.FileName;
+            picImagem.ImageLocation = caminhoImagemAtual;
+        }
     }
 
     protected override void Dispose(bool disposing)
