@@ -153,8 +153,14 @@ public partial class CadastroForm {
 
         var lblPesquisa = new Label { Text = "Pesquisar por nome ou código:", AutoSize = true };
         var lblCategoria = new Label { Text = "Categoria:", AutoSize = true };
-       
-        var lblDadosProduto = new Label { Text = "Dados do Produto", AutoSize = true };
+        var lblDadosProduto = new Label
+        {
+            Text = "Dados do Produto",
+            AutoSize = true,
+            Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+            ForeColor = Color.DarkBlue,
+            Padding = new Padding(0, 10, 0, 5)
+        };
         var lblCodigo = new Label { Text = "Codigo:", AutoSize = true };
         var lblNome = new Label { Text = "Nome:", AutoSize = true };
         var lblEstoque = new Label { Text = "Estoque:", AutoSize = true };
@@ -263,6 +269,14 @@ public partial class CadastroForm {
         btnFechar, btnCancelar
         });
         layout.Controls.Add(botoesCancelar, 3, 9);
+
+        lblPesquisa.Click += (s, e) => txtPesquisa.Focus();
+        lblCodigo.Click += (s, e) => txtCodigo.Focus();
+        lblNome.Click += (s, e) => txtNome.Focus();
+        lblPreco.Click += (s, e) => txtPreco.Focus();
+        lblEstoque.Click += (s, e) => numEstoque.Focus();
+        lblCadastro.Click += (s, e) => dtpDataCadastro.Focus();
+        lblCategoriaForm.Click += (s, e) => cmbCategoriaForm.Focus();
 
         Controls.Add(layout);
     }

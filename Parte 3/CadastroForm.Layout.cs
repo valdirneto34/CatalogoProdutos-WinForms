@@ -2,20 +2,6 @@ namespace CatalogoProdutos;
 
 public partial class CadastroForm
 {
-    private readonly PictureBox picImagem = new()
-    {
-        Dock = DockStyle.Fill,
-        SizeMode = PictureBoxSizeMode.Zoom,
-        BorderStyle = BorderStyle.FixedSingle,
-        MinimumSize = new Size(100, 100)
-    };
-
-    private readonly Button btnSelecionarImagem = new()
-    {
-        Text = "Selecionar uma Imagem",
-        AutoSize = true,
-        Anchor = AnchorStyles.Left
-    };
     private readonly TextBox txtPesquisa = new()
     {
         Dock = DockStyle.Fill,
@@ -40,7 +26,7 @@ public partial class CadastroForm
     {
         Text = "",
         AutoSize = true,
-        Anchor = AnchorStyles.Right
+        Anchor = AnchorStyles.Right,
     };
     private readonly DataGridView grade = new()
     {
@@ -115,33 +101,41 @@ public partial class CadastroForm
         Margin = new Padding(0),
         TabIndex = 11
     };
-
     private readonly CheckBox chkPromocao = new()
     {
         Text = "Produto em Promoção",
         AutoSize = true,
         TabIndex = 12
     };
-
     private readonly NumericUpDown numDesconto = new()
     {
         Dock = DockStyle.Fill,
         Minimum = 1,
         Maximum = 70,
         Value = 1,
-        Visible = false, 
+        Enabled = false,
         TabIndex = 13
     };
-
     private readonly Label lblPrecoFinal = new()
     {
         Text = "",
         AutoSize = true,
-        Visible = false, // Começa invisível
-        ForeColor = Color.DarkGreen, // Cor para destacar o preço
+        ForeColor = Color.DarkGreen,
         Font = new Font("Segoe UI", 9F, FontStyle.Bold)
     };
-
+    private readonly PictureBox picImagem = new()
+    {
+        Dock = DockStyle.Fill,
+        SizeMode = PictureBoxSizeMode.Zoom,
+        BorderStyle = BorderStyle.FixedSingle,
+        MinimumSize = new Size(100, 100)
+    };
+    private readonly Button btnSelecionarImagem = new()
+    {
+        Text = "Selecionar uma Imagem",
+        AutoSize = true,
+        Anchor = AnchorStyles.Left
+    };
     private readonly Button btnNovo = new()
     {
         Text = "Novo",
@@ -179,7 +173,7 @@ public partial class CadastroForm
     {
         Text = "Cadastro Produtos";
         ClientSize = new Size(760, 480);
-        MinimumSize = new Size(600, 400);
+        MinimumSize = new Size(600, 00);
         StartPosition = FormStartPosition.CenterScreen;
         AutoScaleMode = AutoScaleMode.Font;
         AcceptButton = btnSalvar;
@@ -197,8 +191,14 @@ public partial class CadastroForm
 
         var lblPesquisa = new Label { Text = "Pesquisar por nome ou código:", AutoSize = true };
         var lblCategoria = new Label { Text = "Categoria:", AutoSize = true };
-
-        var lblDadosProduto = new Label { Text = "Dados do Produto", AutoSize = true };
+        var lblDadosProduto = new Label
+        {
+            Text = "Dados do Produto",
+            AutoSize = true,
+            Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+            ForeColor = Color.DarkBlue,
+            Padding = new Padding(0, 10, 0, 5)
+        };
         var lblCodigo = new Label { Text = "Codigo:", AutoSize = true };
         var lblNome = new Label { Text = "Nome:", AutoSize = true };
         var lblEstoque = new Label { Text = "Estoque:", AutoSize = true };
@@ -286,8 +286,7 @@ public partial class CadastroForm
         var lblImagem = new Label { Text = "Imagem:", AutoSize = true };
         layout.Controls.Add(lblImagem, 0, 10);
         layout.Controls.Add(picImagem, 1, 10);
-        layout.Controls.Add(btnSelecionarImagem, 2, 10
-        );
+        layout.Controls.Add(btnSelecionarImagem, 2, 10);
 
         var botoes = new FlowLayoutPanel
         {
@@ -313,6 +312,14 @@ public partial class CadastroForm
         btnFechar, btnCancelar
         });
         layout.Controls.Add(botoesCancelar, 3, 11);
+
+        lblPesquisa.Click += (s, e) => txtPesquisa.Focus();
+        lblCodigo.Click += (s, e) => txtCodigo.Focus();
+        lblNome.Click += (s, e) => txtNome.Focus();
+        lblPreco.Click += (s, e) => txtPreco.Focus();
+        lblEstoque.Click += (s, e) => numEstoque.Focus();
+        lblCadastro.Click += (s, e) => dtpDataCadastro.Focus();
+        lblCategoriaForm.Click += (s, e) => cmbCategoriaForm.Focus();
 
         Controls.Add(layout);
     }

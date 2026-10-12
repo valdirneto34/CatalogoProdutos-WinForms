@@ -70,21 +70,20 @@ public partial class CadastroForm : Form
             if (produto != null)
             {
                 if (produto.Estoque == 0)
-                {
                     grade.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightCoral;
-                }
                 else if (produto.Estoque >= 1 && produto.Estoque <= 5)
-                {
                     grade.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightYellow;
-                }
                 else
-                {
                     grade.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.White;
+
+                if (grade.Columns[e.ColumnIndex].DataPropertyName == "Preco")
+                {
+                    e.Value = produto.PrecoFinal;
+                    e.FormattingApplied = true;
                 }
             }
         }
     }
-
 
     private void NovoProduto(object? sender, EventArgs args)
     {
@@ -119,6 +118,7 @@ public partial class CadastroForm : Form
 
         txtCodigo.Focus();
     }
+
     private bool ValidarCampos()
     {
         erros.Clear();
@@ -161,9 +161,9 @@ public partial class CadastroForm : Form
             return false;
         }
 
-        if (txtPreco.Text.Trim().Contains("."))
+        if (txtPreco.Text.Trim().Contains('.'))
         {
-            MessageBox.Show("Digite o preço com \",\"", "Preço inválido.", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("Digite o preço com vírgula \",\".", "Preço inválido.", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             txtPreco.Focus();
             return false;
         }
@@ -172,10 +172,7 @@ public partial class CadastroForm : Form
 
     private void MudancaPromocao(object? sender, EventArgs e)
     {
-        bool emPromocao = chkPromocao.Checked;
-        numDesconto.Visible = emPromocao;
-        lblPrecoFinal.Visible = emPromocao;
-
+        numDesconto.Enabled = chkPromocao.Checked;
         CalcularPrecoFinal();
     }
 
@@ -183,11 +180,9 @@ public partial class CadastroForm : Form
     {
         if (chkPromocao.Checked && double.TryParse(txtPreco.Text.Trim(), out double precoAtual))
         {
-            double percentual = (double)numDesconto.Value;
-            double valorDesconto = precoAtual * (percentual / 100.0);
-            double precoFinal = precoAtual - valorDesconto;
+            double precoFinal = precoAtual * (1 - ((double)numDesconto.Value / 100.0));
 
-            lblPrecoFinal.Text = $"Preço com desconto: R$ {precoFinal:F2}";
+            lblPrecoFinal.Text = $"Preço com desconto: {precoFinal:C}";
         }
         else
         {
@@ -209,7 +204,6 @@ public partial class CadastroForm : Form
         DateTime dataCadastro = dtpDataCadastro.Value;
         bool ativo = rdbAtivo.Checked;
         bool emPromocao = chkPromocao.Checked;
-        bool novoCadastro = produtoEmEdicao is null;
 
 
         if (produtoEmEdicao is null)
@@ -239,7 +233,7 @@ public partial class CadastroForm : Form
             produtoEmEdicao.Ativo = ativo;
             produtoEmEdicao.EmPromocao = emPromocao;
             produtoEmEdicao.CaminhoImagem = caminhoImagemAtual;
-            produtoEmEdicao.PorcentoDesconto = chkPromocao.Checked? (int)numDesconto.Value : 0;
+            produtoEmEdicao.PorcentoDesconto = chkPromocao.Checked ? (int)numDesconto.Value : 0;
 
             produtos.ResetItem(produtos.IndexOf(produtoEmEdicao));
         }
@@ -263,9 +257,9 @@ public partial class CadastroForm : Form
         cmbCategoriaForm.SelectedItem = produtoEmEdicao.Categoria;
         numEstoque.Value = produtoEmEdicao.Estoque;
         dtpDataCadastro.Value = produtoEmEdicao.DataCadastro;
-        
+
         caminhoImagemAtual = produtoEmEdicao.CaminhoImagem;
-        if (!string.IsNullOrEmpty(caminhoImagemAtual) && System.IO.File.Exists(caminhoImagemAtual))
+        if (!string.IsNullOrEmpty(caminhoImagemAtual) && File.Exists(caminhoImagemAtual))
         {
             picImagem.ImageLocation = caminhoImagemAtual;
         }
@@ -323,8 +317,7 @@ public partial class CadastroForm : Form
 
     private void EscolherImagem(object? sender, EventArgs e)
     {
-        using OpenFileDialog ofd = new OpenFileDialog();
-        // Filtro para aceitar apenas PNG ou JPG, conforme o PDF
+        using OpenFileDialog ofd = new();
         ofd.Filter = "Imagens (*.png;*.jpg;*.jpeg)|*.png;*.jpg;*.jpeg";
         ofd.Title = "Selecione a imagem do produto";
 
