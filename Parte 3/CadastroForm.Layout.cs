@@ -24,7 +24,7 @@ public partial class CadastroForm
     };
     private readonly Label lblResultado = new Label()
     {
-        Text = "",
+        Text = "Nenhum produto cadastrado",
         AutoSize = true,
         Anchor = AnchorStyles.Right,
     };
@@ -197,7 +197,7 @@ public partial class CadastroForm
             AutoSize = true,
             Font = new Font("Segoe UI", 12F, FontStyle.Bold),
             ForeColor = Color.DarkBlue,
-            Padding = new Padding(0, 10, 0, 5)
+            Padding = new Padding(0, 2, 0, 3)
         };
         var lblCodigo = new Label { Text = "Codigo:", AutoSize = true };
         var lblNome = new Label { Text = "Nome:", AutoSize = true };

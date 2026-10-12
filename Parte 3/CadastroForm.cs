@@ -39,7 +39,7 @@ public partial class CadastroForm : Form
         btnFechar.Click += (s, e) => Close();
     }
 
-    private void PesquisarProduto(object? sender, EventArgs args)
+    private void PesquisarProduto(object? sender = null, EventArgs? args = null)
     {
         string nomeOuCodigo = txtPesquisa.Text.Trim().ToLower();
         string categoria = cmbCategoria.SelectedItem?.ToString() ?? "";
@@ -57,7 +57,14 @@ public partial class CadastroForm : Form
             if (atendePesquisa && atendeCategoria && atendeEstoque)
                 produtosEncontrados.Add(p);
         }
-        lblResultado.Text = $"{produtosEncontrados.Count} produtos encontrados";
+        if (produtos.Count == 0)
+        {
+            lblResultado.Text = "Nenhum produto cadastrado";
+        }
+        else
+        {
+            lblResultado.Text = $"{produtos.Count} {(produtos.Count > 1 ? "produtos cadastrados" : "produto cadastrado")}";
+        }
         grade.DataSource = produtosEncontrados;
     }
 
@@ -78,7 +85,7 @@ public partial class CadastroForm : Form
 
                 if (grade.Columns[e.ColumnIndex].DataPropertyName == "Preco")
                 {
-                    e.Value = produto.PrecoFinal;
+                    e.Value = produto.PrecoFinal.ToString("C");
                     e.FormattingApplied = true;
                 }
             }
@@ -238,6 +245,7 @@ public partial class CadastroForm : Form
             produtos.ResetItem(produtos.IndexOf(produtoEmEdicao));
         }
         PrepararNovo();
+        PesquisarProduto();
     }
 
     private void SelecionarProduto(object? sender, DataGridViewCellEventArgs args)
@@ -307,6 +315,7 @@ public partial class CadastroForm : Form
 
         produtos.Remove(produtoEmEdicao);
         PrepararNovo();
+        PesquisarProduto();
     }
 
     private void CancelarEdicao(object? sender, EventArgs args)
