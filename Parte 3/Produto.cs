@@ -10,6 +10,7 @@ public class Produto
     public DateTime DataCadastro { get; set; }
     public bool Ativo { get; set; }
     public bool EmPromocao { get; set; }
+    public int PorcentoDesconto {get; set;}
     public string CaminhoImagem { get; set; } = "";
 
 }

@@ -286,7 +286,8 @@ public partial class CadastroForm
         var lblImagem = new Label { Text = "Imagem:", AutoSize = true };
         layout.Controls.Add(lblImagem, 0, 10);
         layout.Controls.Add(picImagem, 1, 10);
-        layout.Controls.Add(btnSelecionarImagem, 2, 9);
+        layout.Controls.Add(btnSelecionarImagem, 2, 10
+        );
 
         var botoes = new FlowLayoutPanel
         {

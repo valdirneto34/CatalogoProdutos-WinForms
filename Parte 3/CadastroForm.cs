@@ -204,11 +204,6 @@ public partial class CadastroForm : Form
         string nome = txtNome.Text.Trim();
         string categoria = cmbCategoriaForm.SelectedItem?.ToString() ?? "";
         double preco = double.Parse(txtPreco.Text.Trim());
-        if (chkPromocao.Checked)
-        {
-            double percentual = (double)numDesconto.Value;
-            preco = preco - (preco * (percentual / 100.0));
-        }
 
         int estoque = (int)numEstoque.Value;
         DateTime dataCadastro = dtpDataCadastro.Value;
@@ -229,7 +224,8 @@ public partial class CadastroForm : Form
                 DataCadastro = dataCadastro,
                 Ativo = ativo,
                 EmPromocao = emPromocao,
-                CaminhoImagem = caminhoImagemAtual
+                CaminhoImagem = caminhoImagemAtual,
+                PorcentoDesconto = chkPromocao.Checked ? (int)numDesconto.Value : 0,
             });
         }
         else
@@ -243,6 +239,7 @@ public partial class CadastroForm : Form
             produtoEmEdicao.Ativo = ativo;
             produtoEmEdicao.EmPromocao = emPromocao;
             produtoEmEdicao.CaminhoImagem = caminhoImagemAtual;
+            produtoEmEdicao.PorcentoDesconto = chkPromocao.Checked? (int)numDesconto.Value : 0;
 
             produtos.ResetItem(produtos.IndexOf(produtoEmEdicao));
         }
@@ -266,7 +263,7 @@ public partial class CadastroForm : Form
         cmbCategoriaForm.SelectedItem = produtoEmEdicao.Categoria;
         numEstoque.Value = produtoEmEdicao.Estoque;
         dtpDataCadastro.Value = produtoEmEdicao.DataCadastro;
-
+        
         caminhoImagemAtual = produtoEmEdicao.CaminhoImagem;
         if (!string.IsNullOrEmpty(caminhoImagemAtual) && System.IO.File.Exists(caminhoImagemAtual))
         {
@@ -286,6 +283,15 @@ public partial class CadastroForm : Form
             rdbInativo.Checked = true;
         }
         chkPromocao.Checked = produtoEmEdicao.EmPromocao;
+
+        if (produtoEmEdicao.EmPromocao && produtoEmEdicao.PorcentoDesconto > 0)
+        {
+            numDesconto.Value = produtoEmEdicao.PorcentoDesconto;
+        }
+        else
+        {
+            numDesconto.Value = 1;
+        }
 
         btnSalvar.Text = "Atualizar";
         btnExcluir.Enabled = true;
