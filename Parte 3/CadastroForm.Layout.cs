@@ -38,7 +38,7 @@ public partial class CadastroForm
         MultiSelect = false,
         RowHeadersVisible = false,
         SelectionMode = DataGridViewSelectionMode.FullRowSelect,
-        AutoGenerateColumns = true,
+        AutoGenerateColumns = false,
         AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
     };
     private readonly TextBox txtCodigo = new()
@@ -136,6 +136,12 @@ public partial class CadastroForm
         AutoSize = true,
         Anchor = AnchorStyles.Left
     };
+    private readonly Button btnRemoverImagem = new()
+    {
+        Text = "Remover Imagem",
+        AutoSize = true,
+        Anchor = AnchorStyles.Left
+    };
     private readonly Button btnNovo = new()
     {
         Text = "Novo",
@@ -172,8 +178,8 @@ public partial class CadastroForm
     private void MontarTela()
     {
         Text = "Cadastro Produtos";
-        ClientSize = new Size(760, 480);
-        MinimumSize = new Size(600, 00);
+        ClientSize = new Size(800, 600);
+        MinimumSize = new Size(750, 500);
         StartPosition = FormStartPosition.CenterScreen;
         AutoScaleMode = AutoScaleMode.Font;
         AcceptButton = btnSalvar;
@@ -206,6 +212,7 @@ public partial class CadastroForm
         var lblCategoriaForm = new Label { Text = "Categoria:", AutoSize = true };
         var lblPreco = new Label { Text = "Preço:", AutoSize = true };
         var lblCadastro = new Label { Text = "Cadastro:", AutoSize = true };
+        var lblImagem = new Label { Text = "Imagem:", AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.TopRight };
 
         var layout = new TableLayoutPanel
         {
@@ -253,6 +260,11 @@ public partial class CadastroForm
         layout.Controls.Add(lblResultado, 3, 2);
 
         layout.Controls.Add(grade, 0, 3);
+        grade.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Codigo", HeaderText = "Código" });
+        grade.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Nome", HeaderText = "Produto" });
+        grade.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Categoria", HeaderText = "Categoria" });
+        grade.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Preco", HeaderText = "Preço" });
+        grade.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Estoque", HeaderText = "Estoque" });
         layout.SetColumnSpan(grade, 4);
 
         layout.Controls.Add(lblDadosProduto, 0, 4);
@@ -283,10 +295,18 @@ public partial class CadastroForm
         layout.Controls.Add(lblPrecoFinal, 2, 9);
         layout.SetColumnSpan(lblPrecoFinal, 2);
 
-        var lblImagem = new Label { Text = "Imagem:", AutoSize = true };
         layout.Controls.Add(lblImagem, 0, 10);
         layout.Controls.Add(picImagem, 1, 10);
-        layout.Controls.Add(btnSelecionarImagem, 2, 10);
+        var botoesImagem = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            AutoSize = true,
+            Anchor = AnchorStyles.Left,
+            FlowDirection = FlowDirection.LeftToRight
+        };
+        botoesImagem.Controls.AddRange(new Control[] { btnSelecionarImagem, btnRemoverImagem });
+        layout.Controls.Add(botoesImagem, 2, 10);
+        layout.SetColumnSpan(botoesImagem, 2);
 
         var botoes = new FlowLayoutPanel
         {
@@ -294,9 +314,7 @@ public partial class CadastroForm
             AutoSize = true,
             TabIndex = 14
         };
-        botoes.Controls.AddRange(new Control[]{
-        btnNovo, btnSalvar, btnExcluir
-        });
+        botoes.Controls.AddRange(new Control[] { btnNovo, btnSalvar, btnExcluir });
         layout.Controls.Add(botoes, 0, 11);
         layout.SetColumnSpan(botoes, 3);
 

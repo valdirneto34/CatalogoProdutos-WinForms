@@ -34,6 +34,7 @@ public partial class CadastroForm : Form
         txtPreco.TextChanged += CalcularPrecoFinal;
 
         btnSelecionarImagem.Click += EscolherImagem;
+        btnRemoverImagem.Click += RemoverImagem;
 
         btnCancelar.Click += CancelarEdicao;
         btnFechar.Click += (s, e) => Close();
@@ -335,6 +336,12 @@ public partial class CadastroForm : Form
             caminhoImagemAtual = ofd.FileName;
             picImagem.ImageLocation = caminhoImagemAtual;
         }
+    }
+
+    private void RemoverImagem(object? sender, EventArgs e)
+    {
+        caminhoImagemAtual = "";
+        picImagem.ImageLocation = null;
     }
 
     protected override void Dispose(bool disposing)
