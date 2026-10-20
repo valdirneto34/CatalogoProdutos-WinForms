@@ -2,6 +2,8 @@
 
 Uma aplicação desktop robusta e interativa desenvolvida em C# (Windows Forms) para o gerenciamento de um catálogo de produtos. Este projeto foi construído com forte ênfase em **Programação Orientada a Eventos**, componentização de layout dinâmico e separação de responsabilidades.
 
+O projeto documenta a evolução da interface gráfica através de diferentes etapas (separadas por pastas), culminando em uma versão final altamente interativa e validada.
+
 ## ✨ Funcionalidades
 
 * **Gestão de Produtos (CRUD):** Cadastro completo com validação rigorosa de campos (prevenção de campos vazios, tratamento de decimais com vírgula e validação de preços negativos).
@@ -19,12 +21,10 @@ Uma aplicação desktop robusta e interativa desenvolvida em C# (Windows Forms) 
 **Engenharia de Software & Boas Práticas:**
 * **Programação Orientada a Eventos:** Manipulação avançada de eventos de UI (`CellFormatting`, `CellClick`, `CheckedChanged`, manipuladores via *Expressões Lambda*) para criar uma interface ágil e responsiva.
 * **Arquitetura de Layout Responsivo:** Uso extensivo de `TableLayoutPanel` e `FlowLayoutPanel`, combinados com propriedades de `Anchor` e `Dock`, dispensando o posicionamento absoluto e garantindo que a tela se adapte a diferentes resoluções.
-* **Separação de Interface e Lógica (Partial Classes):** 
+* **Separação de Interface e Lógica (Partial Classes):**
   * `CadastroForm.Layout.cs`: Arquivo dedicado exclusivamente à montagem visual e estilização via código.
   * `CadastroForm.cs`: Arquivo focado nas regras de negócio e manipulação de eventos.
 * **Single Source of Truth (Fonte Única da Verdade):** Uso de Propriedade Computada (`PrecoFinal`) na classe modelo, evitando redundância de dados em memória e garantindo cálculos consistentes em toda a aplicação.
-
----
 
 ## ⚙️ Como Executar o Projeto
 
@@ -36,13 +36,17 @@ Como a aplicação foi desenvolvida em .NET, é necessário ter o [SDK do .NET 8
    cd CatalogoProdutos
    ```
 
-2. **Compile e execute a aplicação:**
-   Na raiz do projeto (onde está localizado o arquivo `.csproj`), execute o seguinte comando no terminal:
+2. **Navegue até a versão desejada:**
+   O projeto está dividido em etapas de evolução. Para testar a versão final (mais completa), entre na pasta correspondente no terminal:
+   ```bash
+   cd "Parte 3"
+   ```
+
+3. **Compile e execute a aplicação:**
+   Dentro da pasta escolhida (onde está o arquivo `.csproj`), execute:
    ```bash
    dotnet run
    ```
-
----
 
 ## 📁 Estrutura do Projeto
 
@@ -50,8 +54,6 @@ Como a aplicação foi desenvolvida em .NET, é necessário ter o [SDK do .NET 8
 * `Produto.cs`: Entidade de domínio do sistema. Guarda as propriedades de cada item e contém a inteligência de cálculo de descontos.
 * `CadastroForm.Layout.cs`: Parte da classe principal que orquestra a criação, personalização e injeção de todos os controles visuais na tela.
 * `CadastroForm.cs`: Parte da classe principal que concentra as coleções de dados (`BindingList<Produto>`), os gatilhos dos botões e as validações do sistema.
-
----
 
 ## 👨‍💻 Autores
 
